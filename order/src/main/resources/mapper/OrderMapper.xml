@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC  
+    "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+   
+<mapper namespace="com.fh.mapper.OrderMapper">
+
+
+
+    <sql id="drugWhereSql">
+        <where>
+            <if test="minPrice != null">
+                <![CDATA[
+              and m.subTotal >= #{minPrice}
+              ]]>
+            </if>
+
+
+            <if test="maxPrice != null">
+                <![CDATA[
+            and m.subTotal <= #{maxPrice}
+            ]]>
+            </if>
+            and  isDel=1
+        </where>
+    </sql>
+
+
+    <select id="queryCount" parameterType="OrderQuery" resultType="long">
+        select count(*) from t_order m left join t_product t on m.productId = t.id
+        <include refid="drugWhereSql"></include>
+    </select>
+
+    <select id="queryOrder" parameterType="OrderQuery" resultType="com.fh.model.Order">
+        select m.*,t.name "typeName",t.price "typePrice" from t_order m left join t_product t on m.productId = t.id
+        <include refid="drugWhereSql"></include>
+        LIMIT #{start},#{length}
+    </select>
+
+
+
+
+
+
+    <select id="queryOrderList" parameterType="com.fh.model.Orders" resultType="com.fh.model.Order">
+        select m.*,t.name "typeName",t.price "typePrice" from t_order m left join t_product t on m.productId = t.id where 1=1
+        <if test="name !=null and name!=''">
+            and t.name like "%"#{name}"%"
+        </if>
+
+        <if test="minPrice!=null">
+            and t.price &gt; #{minPrice}
+        </if>
+        <if test="maxPrice!=null">
+            and t.price  &lt; #{maxPrice}
+        </if>
+    </select>
+
+    <select id="queryTypeList" resultType="com.fh.model.Product">
+      SELECT * from t_product
+    </select>
+
+    <!-- 添加 -->
+    <insert id="addOrder" parameterType="com.fh.model.Order" >
+        insert into  t_order (productId,count,subTotal)
+        values (#{productId},#{count},#{subTotal})
+    </insert>
+
+   <!-- <delete id="deleteGame" parameterType="java.lang.Integer">
+        delete from t_game where nid=#{nid}
+    </delete>-->
+    <update id="updateStatusDown" parameterType="com.fh.model.Order">
+        update t_order set isDel = isDel-1 where id=#{id}
+    </update>
+
+    <!--<delete id="deleteAll">
+        delete from t_game where nid in
+        <foreach collection="array" item="ids" open="("  separator=","  close=")">
+            #{ids}
+        </foreach>
+    </delete>-->
+
+    <!-- 批量删除 -->
+    <delete id="deleteBatch" parameterType="list">
+        delete from <include refid="TableName"></include> where orderId in
+        <foreach collection="list"  open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+
+    </delete>
+
+</mapper>

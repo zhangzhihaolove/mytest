@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="/js/jquery-3.3.1.min.js"></script>
+    <link rel="stylesheet" href="/js/layui-master/dist/css/layui.css" media="all">
+    <link rel="stylesheet"
+          href="/js/bootstrap/css/bootstrap.min.css">
+    <link href="/js/DataTables/DataTables-1.10.18/css/jquery.dataTables.css"rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="/js/bootstrap/datetimepicker/bootstrap-datetimepicker.css">
+
+    <link  href="/js/fileinput5/css/fileinput.css" rel="stylesheet">
+
+    <script type="text/javascript"src="/js/DataTables/DataTables-1.10.18/js/jquery.dataTables.js"></script>
+    <script type="text/javascript"src="/js/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/js/layui-master/dist/layui.js"></script>
+    <script src="/js/bootstrap/datetimepicker/bootstrap-datetimepicker.js"></script>
+
+    <script src="/js/fileinput5/js/fileinput.js"></script>
+    <script src="/js/fileinput5/js/locales/zh.js"></script>
+</head>
+<body>
+<!--添加模态框-->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button"  class="close" data-dismiss="modal"
+                        aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel">添加页面</h4>
+            </div>
+            <form>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">电影名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="name" id="add_name" required  lay-verify="required" placeholder="请输入电影名称" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">票价</label>
+                    <div class="layui-input-block">
+                        <input type="double" name="price" id="add_price" required  lay-verify="required" placeholder="请输入票价" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">数量</label>
+                    <div class="layui-input-block">
+                        <input type="double" name="price" id="add_count" required  lay-verify="required" placeholder="请输入数量" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">语种</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="add_sex" value="1">中文
+                        <input type="radio" name="add_sex" value="2">外语
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">类型</label>
+                    <div class="layui-input-block">
+                        <select class="form-control" id="add_type"></select>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">放映时间</label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input" autocomplete="off" ame="showTime" id="add_showTime"  style="width: 280px">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button type="button" class="btn btn-default"
+                                data-dismiss="modal">关闭</button>
+                        <button type="reset" class="btn btn-default">重置</button>
+                        <button type="button" class="btn btn-primary" onclick="addBook()">提交更改</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--修改模态框-->
+<div class="modal fade" id="myModall" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button"  class="close" data-dismiss="modal"
+                        aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabell">修改页面</h4>
+            </div>
+            <form>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">电影名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="name" id="update_name" required  lay-verify="required" placeholder="请输入电影名称" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">票价</label>
+                    <div class="layui-input-block">
+                        <input type="double" name="price" id="update_price" required  lay-verify="required" placeholder="请输入票价" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">数量</label>
+                    <div class="layui-input-block">
+                        <input type="double" name="price" id="update_count" required  lay-verify="required" placeholder="请输入数量" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">语种</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="update_sex" value="1">中文
+                        <input type="radio" name="update_sex" value="2">外语
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">类型</label>
+                    <div class="layui-input-block">
+                        <select class="form-control" id="update_type"></select>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">放映时间</label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input" autocomplete="off" ame="showTime" id="update_showTime"  style="width: 280px">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button type="button" class="btn btn-default"
+                                data-dismiss="modal">关闭</button>
+                        <button type="reset" class="btn btn-default">重置</button>
+                        <button type="button" class="btn btn-primary" onclick="addBook()">提交更改</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!- 展示 --->
+<table id="demo" lay-filter="test"></table>
+</body>
+<!--点击事件-->
+<style type="text/css">
+    /*{# 设置table每一行的height #}*/
+    .layui-table-cell {
+        height: auto;
+        line-height: 30px;
+
+    }
+</style>
+<!--时间-->
+<script>
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+        laydate.render({
+            elem: '#add_showTime'
+        });
+        laydate.render({
+            elem: '#update_showTime'
+        })
+    });
+</script>
+<!-- 下拉框 -->
+<script>
+    /*添加下拉*/
+    function queryAddTypeList(){
+        $.post(
+            "http://localhost:8080/movie/queryTypeList.do",
+            function(result) {
+                if (result.status == 200) {
+                    var data = result.data;
+                    var str = "<option value='0'>==请选择==</option>";
+                    for (var i = 0; i < data.length; i++) {
+                        str += "<option value=" + data[i].id + ">" + data[i].name + "</option>";
+                    }
+                    $("#add_type").html(str);
+                }
+            })
+    }
+    /*修改下拉*/
+    function queryUpdateTypeList(){
+        $.post(
+            "http://localhost:8080/movie/queryTypeList.do",
+            function(result) {
+                if (result.status == 200) {
+                    var data = result.data;
+                    var str = "<option value='0'>==请选择==</option>";
+                    for (var i = 0; i < data.length; i++) {
+                        str += "<option value=" + data[i].id + ">" + data[i].name + "</option>";
+                    }
+                    $("#update_type").html(str);
+                }
+            })
+    }
+</script>
+<!-- 添加 -->
+<script>
+    //Demo
+    layui.use('form', function(){
+        var form = layui.form;
+
+        //监听提交
+        form.on('submit(formDemo)', function(data){
+            layer.msg(JSON.stringify(data.field));
+            return false;
+        });
+    });
+</script>
+<script>
+    $(function(){
+        queryAnimalList();
+        queryAddTypeList();
+        queryUpdateTypeList();
+    });
+
+    /*添加*/
+    function addBook() {
+        var name=$("#add_name").val();
+        var age=$("#add_price").val();
+        var typeId=$("#add_type").val();
+        var bookTime=$("#add_showTime").val();
+        var count=$("#add_count").val();
+        var sex = $("[name='add_sex']:checked").val();
+        $.ajax({
+            url:"http://localhost:8080/movie/addMovie.do",
+            dataType:"json",
+            type:"post",
+            data:{
+                "movieName":name,
+                "moviePrice":age,
+                "country":sex,
+                "typeId":typeId,
+                "showTime":bookTime,
+                "count":count
+            },
+            success:function(data){
+                alert(JSON.stringify(data))
+                if (data.status==200){
+                    location.reload()
+                }
+            },
+            error:function() {
+                alert("添加失败")
+            }
+        })
+    }
+    /* 修改*/
+    function updateBook() {
+        var name=$("#update_name").val();
+        var age=$("#update_price").val();
+        var typeId=$("#update_type").val();
+        var bookTime=$("#update_showTime").val();
+        var count=$("#update_count").val();
+        var sex = $("[name='update_sex']:checked").val();
+        alert()
+        $.ajax({
+            url:"http://localhost:8080/movie/updateMovie",
+            dataType:"json",
+            type:"post",
+            data:{
+                "movieId":id,
+                "movieName":name,
+                "moviePrice":age,
+                "country":sex,
+                "typeId":typeId,
+                "showTime":bookTime,
+                "count":count
+            },
+            success:function(data){
+                alert(JSON.stringify(data))
+                if (data.status==200){
+                    location.reload()
+                }
+            },
+            error:function() {
+                alert("修改失败")
+            }
+        })
+    }
+    /* 查询全部数据 */
+
+    var brandtoupdat;
+    //全部变量 方便调用
+    var data;
+    function queryAnimalList(){
+        $.ajax({
+            url:"http://localhost:8080/movie/queryMovieList.do",
+            type:"post",
+            dataType:"json",
+            data:{},
+            async:false,
+            success:function(datas){
+                if (datas.status==200){
+                    data=datas.data//查出全部的值赋值给data
+                } ;
+            },
+            error:function(){
+                alert("查询异常")
+            }
+        });
+        layui.use('table', function(){
+            var table = layui.table;
+            //第一个实例
+            table.render({
+                elem: '#demo'//获取teble表格里面的id
+                ,page: true//开启分页
+                ,limits: [3,5,10]//自定义分页
+                ,toolbar: 'default' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
+                ,totalRow: true //开启合计行
+                ,cols: [[ //表头
+                    {type: 'checkbox',name:"checkName",fixed: 'left'}
+                    //后跳查询出来的数据
+                    ,{field: 'movieId', title: 'ID', sort: true, fixed: 'left',type:'numbers'}
+                    ,{field: 'movieName', title: '电影名称',sort: true, fixed: 'left'}
+                    ,{field: 'moviePrice', title: '影票价格',sort: true, fixed: 'left'}
+                    ,{field: 'count', title: '影票数量',sort: true, fixed: 'left'}
+                    ,{field: 'country', title: '性别',
+                        templet:function(d){
+                            return d.sex==1?"国语影片":"外语影片";
+                        },
+                        fixed: 'left'}
+                    ,{field: 'typeName', title: '类型',sort: true, fixed: 'left'}
+                    ,{field: 'showTime', title: '放映时间',
+                        templet:function (d) {
+                            //设置日期转换 年月日
+                            return layui.util.toDateString(d.birth,'yyyy-MM-dd')
+                        },
+                        sort: true, fixed: 'left',
+                    }
+                    ,{fixed: 'right',title:'操作', align:'center', toolbar: '#barDemo'}
+
+                ]]
+
+                ,data:data
+
+            });
+
+            table.on('toolbar(test)', function(obj){
+                var checkStatus = table.checkStatus(obj.config.id)
+                    ,data = checkStatus.data; //获取选中的数据
+                switch(obj.event){
+                    case 'add':
+                        //开启模态框
+                        $('#myModal').modal();
+                        break;
+                    case 'update':
+                        if(data.length === 0){
+                            layer.msg('请选择一行');
+                        } else if(data.length > 1){
+                            layer.msg('只能同时编辑一个');
+
+                        } else {
+                            /*  //循环获取修改input里面的id 进行赋值
+                              for(var i=0;i<data.length; i++){
+                                  brandtoupdat=data[i].brandId;
+                                  queryBrandLists();
+                                  $("#id").val(data[i].id);
+                                  $("#productName").val(data[i].productName);
+                                  $("[name='imagePath']").val(data[i].imgaePath);
+                                  $("#upd").html("<img  alt='sdsd' src='http://localhost:8080/"+ data[i].imagePath + "' width='40px' height='40px'/>")
+                                  $("#brs").val(data[i].brandId);
+                                  $("#price").val(data[i].price);
+                                    var araes= data[i].cityId;
+                                     /!*  alert(araes)*!/
+                                  cityIdAreas();
+                                  $("option").each(function(){
+                                      if (araes.indexOf(this.text) != -1) {
+                                          this.selected = true;
+                                      }
+                                  })
+                                  shis();
+                                  $("option").each(function(){
+                                      if (araes.indexOf(this.text) != -1) {
+                                          this.selected = true;
+                                      }
+                                  })
+                                  qus();
+                                  $("option").each(function(){
+                                      if (araes.indexOf(this.text) != -1) {
+                                          this.selected = true;
+                                      }
+                                  })
+                              }
+                              //开启模态框
+                              $('#myModall').modal();*/
+
+                            /* layer.alert('编辑 [id]：'+ checkStatus.data[0].id); */
+                            layer.alert("此功能无效")
+                        }
+                        break;
+                    case 'delete':
+                        if(data.length === 0){
+                            layer.msg('请选择一行');
+                        } else {
+                            layer.confirm('确定删除',function(index){
+                                //定义一个空的变量
+                                var ids="";
+                                //循环下标获取每一个id
+                                for (var i = 0; i < data.length; i++) {
+                                    //循环出来的值赋值给ids+","进行隔离
+                                    ids+=","+data[i].nid;
+                                }
+                                //通过ajax往后台传入获取到的ids
+                                $.ajax({
+                                    url:"http://localhost:8080/movie/deleteAll.do",
+                                    data:{"ids":ids},
+                                    async:false,
+                                    dataType:"json",
+                                    type:"post",
+                                    success:function(data){
+                                        if (data.status==200){
+                                            location.reload()
+                                        }
+                                    },error:function(){
+                                        alert("失败")
+                                    }
+                                })
+                            });
+                        }
+                        break;
+                };
+            });
+
+            //监听行工具事件
+            table.on('tool(test)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+                var data = obj.data //获得当前行数据
+                    ,layEvent = obj.event; //获得 lay-event 对应的值
+                if(layEvent === 'del'){
+                    layer.confirm('确定删除', function(index){
+                        $.post({
+                            url:"http://localhost:8080/movie/deleteMovie.do",
+                            data:{
+                                "id":data.id//根据查询定义的全局变量取出里面id
+                            },
+                            dataType:"json",
+                            success:function(data){
+                                //接收后台穿过来的值
+                                if(data.status==200){//成功
+                                    location.reload()
+                                }else{//失败
+                                    alert("删除失败")
+                                }
+                            },
+                            error:function(){
+                                alert("删除异常")
+                            }
+                        })
+
+                    });
+                } else if(layEvent === 'edit'){
+                    $("#update_id").val(data.id);
+                    $("#update_name").val(data.movieName);
+                    $("#update_price").val(data.moviePrice);
+                    $("[name='update_sex'][value="+data.country+"]").prop("checked",true);
+                    $("#update_type").val(data.typeId);
+                    $("#update_showTime").val(data.showTime).toString();
+                    $("#update_count").val(data.count);
+                    //开启模态框
+                    $('#myModall').modal();
+                }
+            });
+            /*//初始化日期插件
+            initAddDate();*/
+        });
+    }
+    /*function initAddDate(){
+      $('#add_showTime').datetimepicker({
+        format:"YYYY-MM-DD",
+        showClear: true
+      });
+    }*/
+</script>
+<!-- 获取操作框 进行写操作方法样式  ，根据lay-event里面的属性 找到指定的操作方法-->
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon"></i></a>
+    <a class="layui-btn layui-btn-xs" lay-event="edit"><i class="layui-icon"></i></a>
+
+    <!-- 这里同样支持 laytpl 语法，如： -->
+    {{#  if(d.auth > 2){ }}
+    <a class="layui-btn layui-btn-xs" lay-event="check">审核</a>
+    {{#  } }}
+</script>
+</html>
